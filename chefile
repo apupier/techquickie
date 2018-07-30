@@ -1,3 +1,0 @@
-workspace.commands[0].name = "Generate java classes for greeting wsdl"
-workspace.commands[0].type = "mvn"
-workspace.commands[0].commandLine = "mvn generate-sources -Pgenerate-cxf -f "/projects/techquickie/Soap to Rest/greetingsoap""

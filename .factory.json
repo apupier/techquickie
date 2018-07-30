@@ -1,0 +1,123 @@
+{
+  "v": "4.0",
+  "name": "techquickie-workshop-camel",
+  "workspace": {
+    "environments": {
+      "default": {
+        "machines": {
+          "dev-machine": {
+            "attributes": {
+              "memoryLimitBytes": "2147483648"
+            },
+            "servers": {
+              "tomcat8-debug": {
+                "attributes": {},
+                "port": "8000",
+                "protocol": "http"
+              },
+              "springboot": {
+                "attributes": {},
+                "port": "8080",
+                "protocol": "http"
+              }
+            },
+            "volumes": {},
+            "installers": [
+              "org.eclipse.che.exec",
+              "org.eclipse.che.terminal",
+              "org.eclipse.che.ws-agent",
+              "org.eclipse.che.ls.camel"
+            ],
+            "env": {
+              "CHE_MACHINE_NAME": "dev-machine"
+            }
+          }
+        },
+        "recipe": {
+          "type": "dockerimage",
+          "content": "registry.centos.org/che-stacks/spring-boot"
+        }
+      }
+    },
+    "defaultEnv": "default",
+    "projects": [
+      {
+        "links": [],
+        "name": "techquickie",
+        "attributes": {
+          "commands": [
+            "{\"commandLine\":\"mvn clean fabric8:deploy -f ${current.project.path} -Dkubernetes.master=YOUR_OSE_HOST \\\\\\r\\n-Dkubernetes.namespace=YOUR_PROJECT_NAME \\\\\\r\\n-Dkubernetes.auth.basic.username=USER_NAME \\\\\\r\\n-Dkubernetes.auth.basic.password=PASSWORD \\\\\\r\\n-Dfabric8.mode=openshift \\\\\\r\\n-Dkubernetes.trust.certificates=true \\\\\\r\\n-Dfabric8.build.strategy=s2i \\\\\\r\\n-Dkubernetes.auth.tryServiceAccount=false \\\\\\r\\n-Dfabric8.generator.from=registry.access.redhat.com/jboss-fuse-6/fis-java-openshift \\\\\\r\\n-Dfabric8.generator.fromMode=docker \\\\\\r\\n-Dkubernetes.auth.tryKubeConfig=false \\\\\", \"name\":\"Deploy to OpenShift\", \"attributes\":{\"goal\":\"Deploy\"}, \"type\":\"mvn\"}",
+            "{\"commandLine\":\"mvn generate-sources -Pgenerate-cxf -f \\\"/projects/techquickie/Soap to Rest/greetingsoap\\\"\", \"name\":\"Generate java classes for greeting wsdl\", \"attributes\":{\"goal\":\"Build\"}, \"type\":\"mvn\"}"
+          ]
+        },
+        "type": "blank",
+        "source": {
+          "location": "https://github.com/apupier/techquickie",
+          "type": "git",
+          "parameters": {}
+        },
+        "path": "/techquickie",
+        "description": "",
+        "problems": [],
+        "mixins": []
+      }
+    ],
+    "name": "wksp-techquickie-workshop",
+    "commands": [
+      {
+        "commandLine": "scl enable rh-maven33 'mvn install -f /projects/techquickie/Soap to Rest/greetingsoap'",
+        "name": "build",
+        "attributes": {
+          "goal": "Build",
+          "previewUrl": ""
+        },
+        "type": "mvn"
+      },
+      {
+        "commandLine": "scl enable rh-maven33 'mvn clean install -f /projects/techquickie/Soap to Rest/greetingsoap'",
+        "name": "clean build",
+        "attributes": {
+          "goal": "Build",
+          "previewUrl": ""
+        },
+        "type": "mvn"
+      },
+      {
+        "commandLine": "scl enable rh-maven33 'mvn compile spring-boot:run -f /projects/techquickie/Soap to Rest/greetingsoap'",
+        "name": "run",
+        "attributes": {
+          "goal": "Run",
+          "previewUrl": "${server.springboot}"
+        },
+        "type": "custom"
+      },
+      {
+        "commandLine": "scl enable rh-maven33 'mvn spring-boot:run -Drun.jvmArguments=\"-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005\" -f /projects/techquickie/Soap to Rest/greetingsoap'",
+        "name": "debug",
+        "attributes": {
+          "goal": "Debug",
+          "previewUrl": "${server.springboot}"
+        },
+        "type": "custom"
+      }
+    ],
+    "links": []
+  },
+  "ide" :{
+    "onProjectsLoaded" : {
+      "actions" : [{  
+        "id" : "openFile",
+        "properties" : {
+          "file" : "/projects/techquickie/Soap to Rest/greetingsoap/src/main/resources/spring/camel-context.xml"
+          }
+        }]
+      }
+  },
+  "id": "factory91rf887w7p9t05uu",
+  "creator": {
+    "name": "che",
+    "email": "che@eclipse.org",
+    "created": 1532961316350,
+    "userId": "che"
+  }
+}
