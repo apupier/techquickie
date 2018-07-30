@@ -54,7 +54,7 @@
         "source": {
           "location": "https://github.com/apupier/techquickie",
           "type": "git",
-          "parameters": {}
+          "parameters": { "branch" : "ProvideCheFactory" }
         },
         "path": "/techquickie",
         "description": "",
